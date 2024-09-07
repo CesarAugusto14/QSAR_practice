@@ -3,8 +3,10 @@ author: @cesarasa
 
 This file contains utility functions to use for QSAR modeling. 
 """
-
+import os
+import deepchem as dc
 import numpy as np
+import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from rdkit import DataStructs
@@ -49,7 +51,7 @@ def get_similarity(smiles : list,
     num_fingerprints = len(fingerprints)
     # We know that the similarity of a molecule with itself is 1, so we can
     # initialize the matrix with ones in the diagonal.
-    similarity_matrix = np.eye((num_fingerprints, num_fingerprints))
+    similarity_matrix = np.eye(num_fingerprints)
 
     # This is a symmetric matrix, it is not necessary to compute all the values,
     # so we can iterate over the upper triangular part of the matrix, and then
@@ -68,3 +70,40 @@ def get_similarity(smiles : list,
             similarity_matrix[j][i] = similarity
 
     return similarity_matrix, fingerprints, mols
+
+def load_bace(featurizer : int = 'ECFP', splitter = dc.splits.ScaffoldSplitter) -> tuple:
+    """
+    Function that loads the BACE dataset from DeepChem and saves it
+    """
+    _, bace_datasets, _ = dc.molnet.load_bace_regression(featurizer=featurizer, splitter=splitter)
+    data_path = './data_BACE'
+    data_csvs = ['scaffold_bace_train.csv',
+                 'scaffold_bace_valid.csv',
+                 'scaffold_bace_test.csv']
+
+    # Create a directory to store the data
+    if not os.path.exists(data_path):
+        os.makedirs(data_path)
+
+    # Create a list of dataframes:
+    dfs = []
+    # Save the data
+    for i, dataset in enumerate(bace_datasets):
+        smiles = dataset.ids
+        targets = dataset.y
+        fingerprints = dataset.X
+        df_fp = pd.DataFrame(fingerprints)
+        df_fp.columns = ['fp_%d' % i for i in range(df_fp.shape[1])]
+        df_fp['targets'] = targets
+        df_fp['smiles'] = smiles
+
+        # Move smiles to the first column
+        cols = df_fp.columns.tolist()
+        cols = cols[-1:] + cols[:-1]
+        df_fp = df_fp[cols]
+
+        dfs.append(df_fp)
+        # Save the three datasets:
+        df_fp.to_csv(os.path.join(data_path, data_csvs[i]), index=False)
+    df_train, df_valid, df_test = dfs
+    return df_train, df_valid, df_test
