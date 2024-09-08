@@ -75,7 +75,7 @@ def load_bace(featurizer : int = 'ECFP', splitter = dc.splits.ScaffoldSplitter) 
     """
     Function that loads the BACE dataset from DeepChem and saves it
     """
-    _, bace_datasets, _ = dc.molnet.load_bace_regression(featurizer=featurizer, splitter=splitter)
+    _, bace_datasets, _ = dc.molnet.load_bace_regression(featurizer=featurizer, splitter=splitter, random_seed=0)
     data_path = './data_BACE'
     data_csvs = ['scaffold_bace_train.csv',
                  'scaffold_bace_valid.csv',
