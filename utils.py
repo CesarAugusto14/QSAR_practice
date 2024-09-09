@@ -71,11 +71,13 @@ def get_similarity(smiles : list,
 
     return similarity_matrix, fingerprints, mols
 
-def load_bace(featurizer : int = 'ECFP', splitter = dc.splits.ScaffoldSplitter) -> tuple:
+def load_bace(featurizer : int = 'ECFP',
+              splitter = dc.splits.ScaffoldSplitter,
+              random_seed : int = 1301) -> tuple:
     """
-    Function that loads the BACE dataset from DeepChem and saves it
+    Function that loads the BACE dataset from DeepChem and saves it in three different csv files.
     """
-    _, bace_datasets, _ = dc.molnet.load_bace_regression(featurizer=featurizer, splitter=splitter, random_seed=0)
+    _, bace_datasets, _ = dc.molnet.load_bace_regression(featurizer=featurizer, splitter=splitter, random_seed=random_seed)
     data_path = './data_BACE'
     data_csvs = ['scaffold_bace_train.csv',
                  'scaffold_bace_valid.csv',
@@ -105,5 +107,4 @@ def load_bace(featurizer : int = 'ECFP', splitter = dc.splits.ScaffoldSplitter) 
         dfs.append(df_fp)
         # Save the three datasets:
         df_fp.to_csv(os.path.join(data_path, data_csvs[i]), index=False)
-    df_train, df_valid, df_test = dfs
-    return df_train, df_valid, df_test
+    return dfs
