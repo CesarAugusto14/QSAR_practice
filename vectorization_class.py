@@ -38,8 +38,8 @@ class MoleculeVectorizer:
         modeldoc.save(f'{tokenizer_type}_doc2vec.model')
         return modeldoc
     
-    def vector_doc(self,modeldoc, tokenized_sentences):
-            vector_doc = [modeldoc.dv[str(i)] for i in range(len(tokenized_sentences))]
+    def vector_doc(self,modeldoc,tokenized_sentences):
+            vector_doc = [modeldoc.dv[i] for i in range(len(tokenized_sentences))]
             return vector_doc
 
 
