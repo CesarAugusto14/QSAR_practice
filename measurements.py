@@ -134,26 +134,26 @@ def Bias(y_observed  : np.array,
 
 
 
-def main_test():
-    # TEST NRMSE FUNCTION:
-    y_observed = np.load('logs/labels_array.npy')
-    y_predicted = np.load('logs/predictions_array.npy')
-    print(y_predicted.shape)
-    print(y_observed.shape)
-    #TEST
-    print('Checking NRMSE')
-    print(NRMSE(y_observed, y_predicted))
-    # Not using any function
-    print(np.sqrt(1-r2_score(y_observed, y_predicted)))
-    # NOTE: Omid is right.
-    print('Checking NMAE')
-    print(NMAE(y_observed, y_predicted))
-    # NOTE: Omid might be right. 
-    print('Checking Bias')
-    print(Bias(y_observed, y_predicted)) # This is not getting the same result, debug. 
-    # Ask Dr. Pal or check with Ayda. 
-    return None
+# def main_test():
+#     # TEST NRMSE FUNCTION:
+#     y_observed = np.load('logs/labels_array.npy')
+#     y_predicted = np.load('logs/predictions_array.npy')
+#     print(y_predicted.shape)
+#     print(y_observed.shape)
+#     #TEST
+#     print('Checking NRMSE')
+#     print(NRMSE(y_observed, y_predicted))
+#     # Not using any function
+#     print(np.sqrt(1-r2_score(y_observed, y_predicted)))
+#     # NOTE: Omid is right.
+#     print('Checking NMAE')
+#     print(NMAE(y_observed, y_predicted))
+#     # NOTE: Omid might be right. 
+#     print('Checking Bias')
+#     print(Bias(y_observed, y_predicted)) # This is not getting the same result, debug. 
+#     # Ask Dr. Pal or check with Ayda. 
+#     return None
 
 
-if __name__ == '__main__':
-    main_test()
+# if __name__ == '__main__':
+#     main_test()
