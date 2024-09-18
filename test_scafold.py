@@ -81,7 +81,7 @@ def main(argv):
     print(f'Training MSE_lr: {mse_tr_lr}, Test MSE_lr: {mse_te_lr}')
     print(f'Training RMSE_lr: {rmse_tr_lr}, Test RMSE_lr: {rmse_te_lr}')
     # Random Forest
-    modelrf = RandomForestRegressor(n_estimators=500, max_depth=50, random_state=0)
+    modelrf = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=0)
     modelrf.fit(np.array(x_train_vector), y_train)
     y_p_train_rf = modelrf.predict(np.array(x_train_vector))
     y_p_test_rf = modelrf.predict(np.array(x_test_vector))

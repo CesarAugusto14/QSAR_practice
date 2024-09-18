@@ -1,2 +1,6 @@
 *.csv
 data/*
+scaffold_data/*
+*.log
+*.pyc
+*.csv
