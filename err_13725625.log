@@ -1,2 +1,0 @@
-/var/spool/slurmd/job13725625/slurm_script: line 11: 69861 Killed                  python test_scafold.py ./scaffold_data/train.csv ./scaffold_data/valid.csv 'swindow'
-slurmstepd: error: Detected 1 oom_kill event in StepId=13725625.batch. Some of the step tasks have been OOM Killed.
