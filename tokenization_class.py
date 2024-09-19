@@ -63,7 +63,7 @@ class MoleculeTokenizer:
         tokenized_molecules = [atomwise_tokenizer(molecule) for molecule in molecule_list]
         return tokenized_molecules
     
-    def spe_kmer(self, molecule_list, kmer_tokenizer):
+    def spe_kmer(self, molecule_list, ngram):
         # Create a list of tokenized molecules
-        tokenized_molecules = [kmer_tokenizer(molecule,kmer_tokenizer) for molecule in molecule_list]
+        tokenized_molecules = [kmer_tokenizer(molecule,ngram) for molecule in molecule_list]
         return tokenized_molecules

@@ -21,21 +21,27 @@ def data_load(data_path):
     data = pd.read_csv(data_path)
     X=data['SMILES'].values
     y=data['docking score'].values
-    return X,y
+    short = len(min(X,key=len))
+    long = len(max(X,key=len))
+    print(short)
+    print(long)
+    return X,y,short,long
 
-def tokenization(X, tokenization_type):
+def tokenization(X, tokenization_type,long):
     # Tokenization
-    token = tc.MoleculeTokenizer(x_win=5, stride=1)
+    token = tc.MoleculeTokenizer(x_win=long, stride=1)
     if tokenization_type=='atomwise':
-        token_list= token.atomwise_tokenizer(X)
+        token_list= token.spe_atomwise(X)
     elif tokenization_type=='kmer':
-        token_list = token.kmer_tokenizer(X)
+        token_list = token.spe_kmer(X,ngram=25)
     elif tokenization_type=='swindow':
         _,token_list = token.slide_window(X)
     return token_list
 
 def vectorization(token_list):
-    model = Word2Vec(token_list, vector_size=200, window=5, min_count=1, workers=4)
+    model = Word2Vec(vector_size=200, window=5, min_count=1, workers=4)
+    model.build_vocab(token_list)  # Build the vocabulary
+    model.train(token_list, total_examples=len(token_list), epochs=model.epochs)  # Train the model
     model.save('word2vec.model')
     return model
 def sentencevec(sentence, model):
@@ -56,12 +62,12 @@ def main(argv):
     sys.arg2=argv[2]
     # Tokenization type
     sys.arg3=argv[3]
-    x_train, y_train = data_load(sys.arg1)
-    x_test, y_test = data_load(sys.arg2)
+    x_train, y_train,short_t,long_t = data_load(sys.arg1)
+    x_test, y_test,short_v,long_v = data_load(sys.arg2)
     # Tokenization
-    x_train_token = tokenization(x_train, sys.arg3)
+    x_train_token = tokenization(x_train, sys.arg3,long_v)
     
-    x_test_token = tokenization(x_test, sys.arg3)
+    x_test_token = tokenization(x_test, sys.arg3,long_v)
     # Vectorization
     modelv = vectorization(x_train_token)
     x_train_vector = sentence_vectorizer(x_train_token, modelv)
